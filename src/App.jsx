@@ -1,122 +1,118 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useState } from 'react'
 import './App.css'
+import TravelForm from './components/TravelForm';
+import TravelList from './components/TravelList';
+import TravelCard from './components/TravelCard';
+import Header from './components/Header'
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    //여행지 목록 
+    const [travels, setTravels] = useState(() => {
+        const saved = localStorage.getItem('travels');
+        if (saved) {
+            return JSON.parse(saved);
+        }
 
-      <div className="ticks"></div>
+        //샘플 여행지 목록 
+        return [
+            {
+                id: 1,
+                name: '에펠탑',
+                country: '프랑스',
+                city: '파리',
+                date: '2024-07-15',
+                image: 'https://i.namu.wiki/i/yF485NWCazWq7Zd52f5DzchphPkZ4VGVZXkx57AHIygI_GHgHLQnAa2zVJXZ_hxnid6NA09bKhxSc2FeLguNzw.webp',
+                rating: 5,
+                memo: '정말 아름다웠어요! 야경이 최고였습니다.',
+                createdAt: '2024-07-20T10:30:00'
+            },
+            {
+                id: 2,
+                name: '도쿄 타워',
+                country: '일본',
+                city: '도쿄',
+                date: '2024-08-10',
+                image: 'https://i.namu.wiki/i/YhfsSIpv2-kUxHuAKT7IjczYH2zr_H6IxzY-tkzvCWhbXev808r4NHrbf4s9GYhK_psYStWm9FjMfjLQxkW0PQ.webp',
+                rating: 4,
+                memo: '도쿄의 상징! 전망이 정말 좋았어요.',
+                createdAt: '2024-08-15T14:20:00'
+            },
+            {
+                id: 3,
+                name: '콜로세움',
+                country: '이탈리아',
+                city: '로마',
+                date: '2024-09-05',
+                image: 'https://i.namu.wiki/i/mecLdrbH6SANsAVoqJGrYR5XK31DY_6mMbGzSvM_FSrx5DgY9r7HhztOlvH85ecjWalmq08oyzSh2KWGYnAQag.webp',
+                rating: 5,
+                memo: '역사의 무게가 느껴지는 곳이었습니다.',
+                createdAt: '2024-09-10T09:15:00'
+            }];
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+    });
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    //travel변경 시 
+    const [editingTravel, setEditingTravel] = useState(null);
+    useEffect(() => {
+        localStorage.setItem('travels', JSON.stringify(travels));
+    }, [travels]); // 여행지 목록 변경 될 때마다 로컬에 저장 
+
+    //여행지 추가
+    const handleAdd = (newTravel) => {
+        setTravels([...travels, newTravel]);
+    }
+
+    //여행지 수정
+    const handleUpdate = (updateTravel) => {
+        setTravels(travels.map(t => {
+            return t.id === updateTravel.id ? updateTravel : t
+        }));
+        setEditingTravle(null);
+    };
+
+    //여행지 삭제 
+    const handleDelete = (id) => {
+        if (window.confirm("정말 삭제하시겠습니까? ")) {
+            setTravels(travels.filter(t.id !== id));
+        }
+    };
+
+    //수정 모드 상태 관리 
+    //수정 모드 - 수정 시작 
+    const handleEdit = (travel) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    //수정 모드 - 수정 취소
+    const handleCancelEdit = () => {
+        setEditingTravle(null);
+    };
+
+    // 총 국가 수 계산
+    const totalCountries = new Set(travels.map(t => t.country)).size;
+
+    return (
+        <div className="App">
+            <Header
+                totalTrips={travels.length}
+                totalCountries={totalCountries}
+            />
+            <TravelForm
+                onAdd={handleAdd}
+                editingTravel={editingTravel}
+                onUpdate={handleUpdate}
+                onCancelEdit={handleCancelEdit}
+            />
+            <TravelList
+                travels={travels}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+            />
+        </div>
+    )
 }
 
-export default App
+
+export default App;
