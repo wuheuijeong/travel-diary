@@ -90,7 +90,7 @@
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s; //해당 클래스의 모든 애니메이션을 0.3s 동안 실행
+    transition: all 0.3s;
 }
 
 .btn-edit {

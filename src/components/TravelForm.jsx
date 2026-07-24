@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './TravelForm.css'
 
 function TravelForm({ onAdd, editingTravel, onUpdate, onCancelEdit }) {
     const [form, setForm] = useState({

@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import Header from './components/Header'
 import './App.css'
+import TravelForm from './components/TravelForm';
+import TravelList from './components/TravelList';
+import TravelCard from './components/TravelCard';
+import Header from './components/Header'
+
 
 function App() {
-
-    const [travels, setTravels] = useState([])
-
-    // 총 국가 수 계산
-    const totalCountries = new Set(travels.map(t => t.country)).size;
-
 
     //여행지 목록 
     const [travels, setTravels] = useState(() => {
@@ -51,15 +49,14 @@ function App() {
                 rating: 5,
                 memo: '역사의 무게가 느껴지는 곳이었습니다.',
                 createdAt: '2024-09-10T09:15:00'
-            }
+            }];
 
-        ];
     });
 
-    //travle변경 시 
-    const [editingTravle, setEditingTravle] = useState(null);
+    //travel변경 시 
+    const [editingTravel, setEditingTravel] = useState(null);
     useEffect(() => {
-        localStorage.setItem('travels', JSON.stringify(travles));
+        localStorage.setItem('travels', JSON.stringify(travels));
     }, [travels]); // 여행지 목록 변경 될 때마다 로컬에 저장 
 
     //여행지 추가
@@ -93,13 +90,25 @@ function App() {
         setEditingTravle(null);
     };
 
+    // 총 국가 수 계산
     const totalCountries = new Set(travels.map(t => t.country)).size;
 
     return (
-        <div className='App'>
+        <div className="App">
             <Header
                 totalTrips={travels.length}
                 totalCountries={totalCountries}
+            />
+            <TravelForm
+                onAdd={handleAdd}
+                editingTravel={editingTravel}
+                onUpdate={handleUpdate}
+                onCancelEdit={handleCancelEdit}
+            />
+            <TravelList
+                travels={travels}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
             />
         </div>
     )

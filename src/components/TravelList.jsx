@@ -1,4 +1,6 @@
 import TravelCard from "./TravelCard.jsx";
+import './TravelList.css'
+
 
 export default function TravelList({travels, onEdit, onDelete}) {
     if (travels.length === 0) {

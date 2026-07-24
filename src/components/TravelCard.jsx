@@ -1,4 +1,5 @@
-export default function TravelCard(travel, onEdit, onDelete) {
+import './TravelForm.css'
+export default function TravelCard({travel, onEdit, onDelete}) {
 
     const stars = '⭐'.repeat(travel.rating);
 
@@ -16,7 +17,7 @@ export default function TravelCard(travel, onEdit, onDelete) {
                 <h3>{travel.name}</h3>
                 <p className="location">📍{travel.city}, {travel.country}</p>
                 <p className="date">📅{travel.date}</p>
-                <p className="rating">{star}</p>
+                <p className="rating">{stars}</p>
                 {travel.memo && <p className="memo">{travel.memo}</p>}
             </div>
 
